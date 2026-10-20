@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+build/
+dist/
+wheels/
+*.egg-info/
+*.egg
+
+# Virtual environments
+.venv/
+mlvenv/
+venv/
+env/
+
+# Data — NEVER commit audio/patient data
+data/raw/
+data/dementia/
+data/non_dementia/
+data/processed/audio/
+data/processed/features/
+*.wav
+*.mp3
+*.flac
+*.ogg
+
+# Keep metadata CSVs trackable but not the raw ones with PII paths
+# data/metadata/ is tracked
+
+# Model checkpoints
+saved_models/**/*.pt
+saved_models/**/*.pth
+saved_models/**/*.pkl
+saved_models/**/*.joblib
+
+# Results (can be large)
+results/plots/*.png
+results/metrics/*.json
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+logs/
+*.log

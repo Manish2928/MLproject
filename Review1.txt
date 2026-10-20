@@ -1,0 +1,64 @@
+# DementiaVoiceAI - Project Review 1 Report
+
+## Project Overview
+**Project Name:** DementiaVoiceAI
+**Objective:** AI-Based Alzheimer's Disease Detection Using Speech
+**Description:** An end-to-end machine learning system that analyzes speech recordings to identify patterns associated with cognitive impairment. The system extracts acoustic features and uses trained classifiers to produce a binary classification (Cognitive Impairment vs. Control).
+
+---
+
+## Project Completion Status
+**Total Completion:** 25% (3 out of 12 planned phases are complete).
+
+### Completed Work (Progress So Far):
+1. **Setup (Phase 1):** Established the project structure, configuration files (`default.yaml`), and utility scripts (logging, seeding).
+2. **Data Adapter (Phase 2):** Implemented dataset loading mechanisms, dataset splitting into train/validation sets, and basic validation checks.
+3. **Preprocessing (Phase 3):** Added audio validation, audio normalization, and Voice Activity Detection (VAD) to clean up the raw audio files before feature extraction.
+
+### Remaining Work:
+- **Features & Embeddings:** Acoustic feature extraction and Wav2Vec2/HuBERT features.
+- **Modeling (Baselines):** Training Machine Learning baselines like Logistic Regression, SVM, Random Forest, and XGBoost.
+- **Multimodal & Inference:** Fusing audio and transcript data and setting up the end-to-end prediction pipeline.
+- **Evaluation & UI:** Generating metrics/plots and building the Streamlit web application.
+- **Testing & Documentation:** Adding unit/integration tests and writing the final report.
+
+---
+
+## Detailed Explanation of Different Project Components (For Faculty Explanation)
+
+To help you explain the project to your faculty, here is a breakdown of the different (def-def) parts of the project along with their corresponding files:
+
+### 1. Data Layer
+- **Corresponding Files:** `src/data/dataset_adapter.py`, `src/data/splitter.py`
+- **What it does:** This is where the project handles raw audio files. It includes adapters to load audio and metadata from the `data/` folder, and scripts to split the data fairly into training and validation sets.
+- **Why it's important:** Clean and well-organized data is the foundation of any ML project. It ensures the model trains on the right data without data leakage.
+
+### 2. Preprocessing
+- **Corresponding Files:** `src/preprocessing/audio_preprocessor.py`, `src/preprocessing/audio_validator.py`, `src/preprocessing/vad.py`
+- **What it does:** This part takes the raw audio and cleans it up. It normalizes volume levels and applies Voice Activity Detection (VAD) to remove silent parts from the recordings.
+- **Why it's important:** Removing silence and standardizing audio volume ensures the model only focuses on actual speech patterns, improving accuracy.
+
+### 3. Configuration & Entry Point
+- **Corresponding Files:** `configs/default.yaml`, `main.py`
+- **What it does:** These files control the settings (hyperparameters, paths) and serve as the main execution script to run validations or training.
+- **Why it's important:** Centralizing configuration makes the codebase organized and prevents hard-coding values.
+
+### 4. Feature Extraction [Upcoming]
+- **Corresponding Files:** `src/features/` folder
+- **What it does:** Converts the cleaned audio into numbers that a machine learning model can understand. This will involve traditional acoustic features (like pitch and tone) and advanced deep learning embeddings (like Wav2Vec2/HuBERT).
+- **Why it's important:** Raw audio waveforms are too complex for simple classifiers. Extracting meaningful features makes it easier for the AI to detect cognitive impairment patterns.
+
+### 5. Models & Training [Upcoming]
+- **Corresponding Files:** `src/models/` and `src/training/` folders
+- **What it does:** This is the core AI. It defines the machine learning models (SVM, Random Forest, etc.) and trains them on the extracted features.
+- **Why it's important:** This component learns the actual difference between a healthy voice and a voice showing signs of dementia.
+
+### 6. Evaluation & Inference [Upcoming]
+- **Corresponding Files:** `src/evaluation/` and `src/inference/` folders
+- **What it does:** Evaluates how well the trained model performs using metrics like accuracy and F1-score, and creates plots. Inference is the pipeline that takes a brand-new audio file and makes a final prediction.
+- **Why it's important:** Proves to the faculty that the model works and can be used on unseen data.
+
+### 7. User Interface [Upcoming]
+- **Corresponding Files:** `app/` folder (Streamlit scripts)
+- **What it does:** A Streamlit-based web application where users can upload an audio file and get a prediction instantly.
+- **Why it's important:** Provides a tangible, interactive demo for the final project presentation rather than just showing terminal code.

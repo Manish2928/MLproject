@@ -1,0 +1,21 @@
+{
+  "selected_model": "Gradient Boosting",
+  "positive_class": 1,
+  "negative_class": 0,
+  "positive_label_name": "dementia",
+  "negative_label_name": "control",
+  "sample_rate": 16000,
+  "seed": 42,
+  "n_features": 143,
+  "n_train": 179,
+  "n_val": 42,
+  "n_test": 52,
+  "n_train_speakers": 89,
+  "n_val_speakers": 23,
+  "n_test_speakers": 28,
+  "test_balanced_accuracy": 0.6082949308755761,
+  "test_roc_auc": 0.6006144393241167,
+  "test_f1": 0.5454545454545454,
+  "sklearn_version": "1.7.2",
+  "librosa_version": "1.0.0"
+}

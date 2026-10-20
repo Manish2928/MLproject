@@ -1,0 +1,46 @@
+[project]
+name = "dementiavoiceai"
+version = "0.1.0"
+description = "AI-Based Alzheimer's Disease Detection Using Speech — Academic ML Project"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "MIT"}
+authors = [
+    {name = "Kashyap Manish", email = "26MAG0047@vitbhopal.ac.in"},
+    {name = "Pravin Kumar", email = "26MAG0012@vitbhopal.ac.in"},
+]
+
+dependencies = [
+    "numpy>=1.26.0",
+    "pandas>=2.1.0",
+    "scipy>=1.11.0",
+    "librosa>=0.10.1",
+    "soundfile>=0.12.1",
+    "scikit-learn>=1.3.0",
+    "xgboost>=2.0.0",
+    "matplotlib>=3.8.0",
+    "seaborn>=0.13.0",
+    "pyyaml>=6.0.1",
+    "tqdm>=4.66.0",
+    "streamlit>=1.28.0",
+]
+
+[project.optional-dependencies]
+deep = [
+    "torch>=2.1.0",
+    "torchaudio>=2.1.0",
+    "transformers>=4.35.0",
+]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"

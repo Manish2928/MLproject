@@ -1,0 +1,186 @@
+# =============================================================================
+# DementiaVoiceAI — Master Configuration
+# =============================================================================
+# This file is the single source of truth for the entire project.
+# Override specific sections via CLI arguments or environment variables.
+# =============================================================================
+
+project:
+  name: "DementiaVoiceAI"
+  version: "0.1.0"
+  description: "AI-Based Alzheimer's Disease Detection Using Speech"
+  seed: 42
+  device: "auto"  # "auto" | "cpu" | "cuda"
+
+# ---------------------------------------------------------------------------
+# Paths (all relative to project root)
+# ---------------------------------------------------------------------------
+paths:
+  data_root: "data"
+  data_raw: "data/raw"
+  data_processed: "data/processed"
+  metadata: "data/metadata"
+  saved_models: "saved_models"
+  reports: "results"
+  logs: "logs"
+
+  # Existing CSV files from the current dataset
+  train_csv: "data/train_dm.csv"
+  valid_csv: "data/valid_dm.csv"
+
+  # On-disk audio directories
+  dementia_audio_dir: "data/dementia"
+  non_dementia_audio_dir: "data/non_dementia"
+
+# ---------------------------------------------------------------------------
+# Audio preprocessing
+# ---------------------------------------------------------------------------
+audio:
+  target_sample_rate: 16000
+  target_channels: 1     # mono
+  max_duration_sec: 600   # 10 minutes
+  min_duration_sec: 1
+  normalize: true
+  normalize_method: "peak"  # "peak" | "rms"
+  noise_reduction:
+    enabled: false
+    method: "spectral_gating"
+    prop_decrease: 0.8
+  vad:
+    enabled: true
+    method: "energy"  # "energy" | "webrtc"
+    energy_threshold: 0.02
+    min_speech_duration_sec: 0.25
+
+# ---------------------------------------------------------------------------
+# Feature extraction
+# ---------------------------------------------------------------------------
+features:
+  acoustic:
+    enabled: true
+    mfcc:
+      n_mfcc: 13
+      n_fft: 2048
+      hop_length: 512
+      include_delta: true
+      include_delta2: true
+    mel_spectrogram:
+      n_mels: 128
+      compute_stats: true  # mean, std per band
+    spectral:
+      centroid: true
+      bandwidth: true
+      rolloff: true
+      contrast: true
+      flatness: true
+    pitch:
+      enabled: true
+      method: "pyin"  # "pyin" | "yin"
+      fmin: 50
+      fmax: 500
+    energy:
+      enabled: true
+    zcr:
+      enabled: true
+    jitter_shimmer:
+      enabled: true
+    pause_features:
+      enabled: true
+      silence_threshold_db: -40
+
+  embeddings:
+    enabled: false  # Enable after baselines are working
+    model_name: "facebook/wav2vec2-base"
+    pooling: "mean"
+    layer: -1
+    batch_size: 4
+    max_audio_length_sec: 30  # Truncate for memory
+
+  linguistic:
+    enabled: false  # Enable when transcripts are available
+
+# ---------------------------------------------------------------------------
+# Data splitting
+# ---------------------------------------------------------------------------
+splitting:
+  method: "stratified_participant"
+  train_ratio: 0.70
+  val_ratio: 0.15
+  test_ratio: 0.15
+  use_existing_split: true  # Use train_dm.csv / valid_dm.csv if available
+
+# ---------------------------------------------------------------------------
+# Training — Baseline models
+# ---------------------------------------------------------------------------
+training:
+  baseline:
+    models:
+      - "logistic_regression"
+      - "svm"
+      - "random_forest"
+      - "xgboost"
+    scaler: "standard"  # "standard" | "minmax" | "robust" | null
+    class_weight: "balanced"
+    cv_folds: 5
+    scoring: "f1"
+    use_smote: false
+    hyperparameter_search: "grid"  # "grid" | "random" | null
+
+  # Training — Neural models
+  neural:
+    architecture: "mlp"  # "mlp" | "cnn1d"
+    hidden_dims: [256, 128, 64]
+    dropout: 0.3
+    activation: "relu"
+    batch_size: 32
+    max_epochs: 100
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    optimizer: "adam"
+    scheduler:
+      enabled: true
+      type: "reduce_on_plateau"
+      patience: 5
+      factor: 0.5
+    early_stopping:
+      enabled: true
+      patience: 15
+      min_delta: 0.001
+      monitor: "val_loss"
+
+# ---------------------------------------------------------------------------
+# Evaluation
+# ---------------------------------------------------------------------------
+evaluation:
+  metrics:
+    - "accuracy"
+    - "precision"
+    - "recall"
+    - "f1"
+    - "roc_auc"
+    - "specificity"
+  generate_plots: true
+  plot_formats: ["png"]
+  save_predictions: true
+  threshold: 0.5
+
+# ---------------------------------------------------------------------------
+# Inference
+# ---------------------------------------------------------------------------
+inference:
+  default_model: "best"  # "best" | specific model name
+  confidence_bands:
+    high: 0.85
+    medium: 0.65
+    low: 0.0
+  disclaimer: "This is an academic AI/ML model and is not a medical diagnostic tool."
+
+# ---------------------------------------------------------------------------
+# Application
+# ---------------------------------------------------------------------------
+app:
+  framework: "streamlit"
+  host: "localhost"
+  port: 8501
+  max_upload_size_mb: 100
+  allowed_formats: ["wav", "mp3", "flac", "ogg"]
